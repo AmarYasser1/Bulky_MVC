@@ -1,0 +1,97 @@
+﻿@page
+@model AccessDeniedModel
+@{
+    ViewData["Title"] = "Access denied";
+}
+
+<style>
+    .access-denied-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #f8f9fa;
+    }
+
+    .access-denied-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        max-width: 450px;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    }
+
+    .warning-icon {
+        font-size: 80px;
+        color: #dc3545;
+        animation: pulse 1.5s infinite alternate;
+    }
+
+    @@keyframes pulse {
+        from
+
+    {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.1);
+    }
+
+    }
+
+    .access-denied-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+        margin-top: 15px;
+    }
+
+    .access-denied-message {
+        color: #666;
+        margin-top: 10px;
+        font-size: 18px;
+    }
+
+    .back-home-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 8px;
+        background: #dc3545;
+        color: white;
+        text-decoration: none;
+        transition: background 0.3s ease-in-out;
+    }
+
+        .back-home-btn:hover {
+            background: #a71d2a;
+        }
+</style>
+
+<div class="access-denied-container">
+    <div class="access-denied-card">
+        <div class="warning-icon">⚠️</div>
+        <div class="access-denied-title">@ViewData["Title"]</div>
+        <p class="access-denied-message">You do not have permission to access this resource.</p>
+        <a href="/" class="back-home-btn">Return to Home</a>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+﻿@page
+@model BulkyWebRazor_Temp.Pages.Categories.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Category";
+}
+
+<form asp-page="/categories/delete" method="post">
+    <input type="hidden" asp-for="Category.Id" />
+
+    <div class="border p-3 mt-4 shadow-lg rounded-2">
+        <div class="row pb-3">
+            <h2><span class="text-primary">D</span>elete <span class="text-primary">C</span>ategory</h2>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Category.Name" class="p-0"></label>
+            <input asp-for="Category.Name" disabled class="form-control" />
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Category.DisplayOrder" class="p-0"></label>
+            <input asp-for="Category.DisplayOrder" disabled class="form-control" />
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <button type="submit" class="btn btn-danger form-control">Delete</button>
+            </div>
+            <div class="col-6">
+                <a asp-page="/categories/index" class="btn btn-outline-secondary border form-control">Back to list</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

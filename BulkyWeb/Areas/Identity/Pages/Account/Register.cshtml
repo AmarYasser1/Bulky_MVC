@@ -1,0 +1,258 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-4">
+        <div class="row">
+            <div class="col-12 text-center">
+                @if(User.IsInRole(SD.Role_Admin)) {
+                    <h2 class="py-2 text-white-50 fire-text">Register - ADMIN PORTAL</h2>
+                }else {
+                    <h2 class="py-2 text-white-50 fire-text">Register</h2>
+                }           
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body py-4">
+        <div class="row pt-4">
+            <div class="col-md-12 ">
+                <form id="registerForm" class="row" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <h3 class="border-bottom pb-3 mb-4 text-center text-secondary">Create a new account.</h3>
+                    @* <h2 class="custom-title">Create a new account.</h2> *@
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="form-floating mb-3 col-md-12">
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                        <label asp-for="Input.Email" class="ms-2 text-muted">Email</label>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.Name" class="form-control" placeholder="#"/>
+                        <label asp-for="Input.Name" class="ms-2 text-muted">Full Name</label>
+                        <span asp-validation-for="Input.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.PhoneNumber" class="form-control" placeholder="#" />
+                        <label asp-for="Input.PhoneNumber" class="ms-2 text-muted">Phone Number</label>
+                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                        <label asp-for="Input.Password" class="ms-2 text-muted">Password</label>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                        <label asp-for="Input.ConfirmPassword" class="ms-2 text-muted">Confirm Password</label>
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.StreetAddress" class="form-control" placeholder="#" />
+                        <label asp-for="Input.StreetAddress" class="ms-2 text-muted">Street Address</label>
+                        <span asp-validation-for="Input.StreetAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.City" class="form-control" placeholder="#" />
+                        <label asp-for="Input.City" class="ms-2 text-muted">City</label>
+                        <span asp-validation-for="Input.City" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.State" class="form-control" placeholder="#" />
+                        <label asp-for="Input.State" class="ms-2 text-muted">State</label>
+                        <span asp-validation-for="Input.State" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3 col-md-6">
+                        <input asp-for="Input.PostalCode" class="form-control" placeholder="#" />
+                        <label asp-for="Input.PostalCode" class="ms-2 text-muted">Postal Code</label>
+                        <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
+                    </div>
+                    @if (User.IsInRole(SD.Role_Admin))
+                    {
+                        <div class="form-floating mb-3 col-md-6">
+                            <select asp-for="Input.Role" asp-items="@Model.Input.Roles" class="form-select">
+                                <option disabled selected value="">--Select Role--</option>
+                            </select>
+                        </div>
+                        <div class="form-floating mb-3 col-md-6">
+                            <select asp-for="Input.CompanyId" style="display:none;" asp-items="@Model.Input.Companies" class="form-select">
+                                <option disabled selected value="">--Select Company--</option>
+                            </select>
+                        </div>
+                    }
+                    <div class="col-12 d-flex justify-content-center">
+                        <button id="registerSubmit" type="submit"
+                                class="w-100 orange-gradient-btn">
+                            Register
+                        </button>
+                    </div>
+                </form>
+            </div>
+            @if(!User.IsInRole(SD.Role_Admin)) {
+                <div class="col-md-12 p-3 text-center">
+                    <section>
+                        <p class="divider-text d-flex pt-3">Or</p>
+                        @{
+                            if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                            {
+                                <div>
+                                    <p>
+                                        There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                                            article
+                                            about setting up this ASP.NET application to support logging in via external services
+                                        </a>.
+                                    </p>
+                                </div>
+                            }
+                            else
+                            {
+                                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                                    <div>
+                                        <p>
+                                            @foreach (var provider in Model.ExternalLogins!)
+                                            {
+                                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                            }
+                                        </p>
+                                    </div>
+                                </form>
+                            }
+                        }
+                    </section>
+                </div>
+            }
+            
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function() {
+            $('#Input_Role').change(function() {
+				var selectedRole = $(this).children("option:selected").val();
+				if (selectedRole == "Company") {
+					$('#Input_CompanyId').show();
+				} else {
+					$('#Input_CompanyId').hide();
+				}
+            })
+        })
+    </script>
+}
+
+
+<style>
+    .fire-text {
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        background-image: linear-gradient(orange, red, darkred);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        animation: flicker 1.5s infinite alternate;
+        text-shadow: 0 0 10px orange, 0 0 20px red, 0 0 30px darkred;
+        padding: 10px 20px;
+        display: inline-block;
+        background-color: rgba(0, 0, 0, 0.7); /* Dark overlay for contrast */
+        border-radius: 10px;
+    }
+    @@keyframes flicker {
+        0% {
+            opacity: 1;
+            text-shadow: 0 0 10px orange, 0 0 20px red, 0 0 30px darkred;
+        }
+
+        50% {
+            opacity: 0.8;
+            text-shadow: 0 0 15px orange, 0 0 25px red, 0 0 35px darkred;
+        }
+
+        100% {
+            opacity: 1;
+            text-shadow: 0 0 12px orange, 0 0 22px red, 0 0 32px darkred;
+        }
+    }
+
+    .custom-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-align: center;
+        position: relative;
+        padding-bottom: 10px;
+        color: #343a40; /* Bootstrap’s dark-emphasis color */
+        background: linear-gradient(45deg, #ff6a00, #ee0979);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+        .custom-title::after {
+            content: "";
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, #ff6a00, #ee0979);
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+            animation: underline-glow 1.5s infinite alternate;
+        }
+
+    @@keyframes fadeIn {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    @@keyframes underline-glow {
+        0%
+
+    {
+        width: 80px;
+        opacity: 0.7;
+    }
+
+    100% {
+        width: 120px;
+        opacity: 1;
+    }
+
+    }
+
+    .orange-gradient-btn {
+        background: linear-gradient(45deg, #ff7e5f, #feb47b);
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .orange-gradient-btn:hover {
+            background: linear-gradient(45deg, #feb47b, #ff7e5f);
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        }
+</style>

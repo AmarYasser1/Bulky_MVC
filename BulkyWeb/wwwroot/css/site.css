@@ -1,3 +1,13 @@
+.divider-text:before,
+.divider-text:after {
+    content: "";
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    color: white;
+    flex: 1;
+    margin: auto 0.5em;
+}
+
 html {
   font-size: 14px;
 }
@@ -20,3 +30,14 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/*.footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}*/
